@@ -57,6 +57,7 @@ nav:
       - Quickstart: setup/quickstart.md
       - Environment & RBAC: setup/configuration.md
       - Docker Deployment: setup/docker.md
+      - Production Server (aurora): setup/production.md
   - Integrations:
       - Paperless-ngx: integrations/paperless.md
       - GitHub Wiki: integrations/github_wiki.md
