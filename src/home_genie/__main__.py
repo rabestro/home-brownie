@@ -19,8 +19,8 @@ async def main() -> None:
     logger.info("Starting Home Genie...")
     try:
         Config.validate()
-    except Exception as e:
-        logger.error("Configuration validation failed: %s", e)
+    except Exception:
+        logger.exception("Configuration validation failed")
         sys.exit(1)
 
     bot = create_bot(Config)
