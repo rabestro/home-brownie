@@ -3,6 +3,7 @@
 import logging
 import os
 import re
+from collections import defaultdict
 from datetime import UTC, datetime
 
 from telebot.async_telebot import AsyncTeleBot
@@ -10,6 +11,7 @@ from telebot.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMar
 
 from home_genie.agent import run_agent_query, run_archiving_agent
 from home_genie.config import Config, UserPermissions
+from home_genie.conversation import ConversationHistory
 from home_genie.paperless import DuplicateDocumentError, PaperlessClient
 
 logger = logging.getLogger(__name__)
@@ -20,6 +22,8 @@ SUPPORTED_EXTENSIONS: frozenset[str] = frozenset(
 
 _TELEGRAM_MESSAGE_LIMIT = 4000
 _DOC_TAG_RE = re.compile(r"\[#(\d+)\]")
+
+_user_histories: dict[int, ConversationHistory] = defaultdict(ConversationHistory)
 
 
 def _chunk_text(text: str, limit: int = _TELEGRAM_MESSAGE_LIMIT) -> list[str]:
@@ -94,9 +98,18 @@ async def send_welcome(message: Message, bot: AsyncTeleBot) -> None:
         f"🧞 Hello, {perms.name}! I am **Home Genie**, your personal AI assistant.\n\n"
         f"Connected Systems:\n{summary}\n\n"
         "Commands:\n"
-        "• /get <doc_id> — Download PDF from Paperless archive\n\n"
+        "• /get <doc_id> — Download PDF from Paperless archive\n"
+        "• /clear — Clear conversation history\n\n"
         "Send me documents/photos to archive, or ask questions in plain text.",
     )
+
+
+async def handle_clear(message: Message, bot: AsyncTeleBot) -> None:
+    """Clears conversation history for the sender."""
+    if not is_allowed(message) or not message.from_user:
+        return
+    _user_histories[message.from_user.id].clear()
+    await bot.reply_to(message, "🗑 Conversation history cleared.")
 
 
 async def handle_get(message: Message, bot: AsyncTeleBot) -> None:
@@ -319,7 +332,11 @@ async def handle_text_query(message: Message, bot: AsyncTeleBot) -> None:
     status_message = await bot.reply_to(message, "🧠 Querying assistant...")
     try:
         perms = Config.get_user_permissions(message.from_user.id)
-        agent_report = await run_agent_query(perms, message.text)
+        history = _user_histories[message.from_user.id]
+        prompt = history.build_context(message.text)
+
+        agent_report = await run_agent_query(perms, prompt)
+        history.add(message.text, agent_report)
 
         await bot.delete_message(
             chat_id=status_message.chat.id, message_id=status_message.message_id
@@ -350,6 +367,11 @@ def create_bot(config: type[Config]) -> AsyncTeleBot:
     bot.register_message_handler(
         send_welcome,  # type: ignore[arg-type]
         commands=["start", "help"],
+        pass_bot=True,
+    )
+    bot.register_message_handler(
+        handle_clear,  # type: ignore[arg-type]
+        commands=["clear"],
         pass_bot=True,
     )
     bot.register_message_handler(
