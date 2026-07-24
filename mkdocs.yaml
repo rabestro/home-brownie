@@ -1,0 +1,65 @@
+site_name: 🧞 Home Genie
+site_url: https://rabestro.github.io/home-genie/
+site_description: Autonomous AI-powered Telegram assistant for homelabs, Paperless-ngx, Home Assistant, and GitHub Wiki.
+site_author: Jegors Čemisovs
+
+repo_name: rabestro/home-genie
+repo_url: https://github.com/rabestro/home-genie
+
+theme:
+  name: material
+  language: en
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - attr_list
+
+nav:
+  - Home: index.md
+  - Architecture: architecture.md
+  - Setup & Configuration:
+      - Quickstart: setup/quickstart.md
+      - Environment & RBAC: setup/configuration.md
+      - Docker Deployment: setup/docker.md
+  - Integrations:
+      - Paperless-ngx: integrations/paperless.md
+      - GitHub Wiki: integrations/github_wiki.md
+      - Home Assistant: integrations/home_assistant.md
+      - Cloudflare: integrations/cloudflare.md
+      - Home Connect: integrations/home_connect.md
