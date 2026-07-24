@@ -14,9 +14,7 @@ from home_genie.config import Config, UserPermissions
 
 logger = logging.getLogger(__name__)
 
-# Regex to strip markdown links containing file:// URLs, e.g. [Title](file:///path)
 _FILE_LINK_RE = re.compile(r"\[([^\]]+)\]\(file://[^)]+\)")
-# Regex to strip bare file:// URLs
 _BARE_FILE_URL_RE = re.compile(r"file://\S+")
 
 _MCP_ENV_PASSTHROUGH: tuple[str, ...] = (
@@ -36,30 +34,44 @@ _MCP_ENV_PASSTHROUGH: tuple[str, ...] = (
 
 PROMPTS_DIR = Path(__file__).parent / "prompts"
 
+ARCHIVE_INSTRUCTIONS = (
+    "You are an expert archiving assistant for the personal document archive in Paperless-ngx. "
+    "You are processing a document that has already been successfully uploaded. "
+    "Its ID is provided in the prompt.\n"
+    "Adhere to these rules when updating this document:\n"
+    "1. Call `get_document` with the given ID to fetch its text content and properties.\n"
+    "2. Based on the document's text, determine the correct metadata "
+    "(Title, Created Date, Correspondent, Document Type).\n"
+    "3. Call `update_document` to update the document's Title, "
+    "Created (in YYYY-MM-DD), Correspondent, and Document Type.\n"
+    "4. Call `list_tags` to see every tag that exists in this archive "
+    "(their names and IDs). Decide which existing tags match the document's "
+    "content, judging by tag names.\n"
+    "5. Update the document's tags via `update_document`, passing the complete "
+    "final list of tag IDs.\n"
+    "6. Call `create_document_note` to add a structured note "
+    "describing the document, owner, and key details.\n"
+    "7. Output a final report describing what actions were done.\n"
+    "IMPORTANT LANGUAGE RULE:\n"
+    "- Detect the language of the document's content and write the note "
+    "and report in that same language.\n"
+    "IMPORTANT FORMATTING RULES:\n"
+    "- The response will be sent as a Telegram message. "
+    "Do NOT use markdown links with URLs. "
+    "Do NOT include any file:// or http:// links in the response.\n"
+    "- Use plain text and emoji for formatting."
+)
+
 
 def _clean_agent_response(text: str) -> str:
-    """Removes internal file:// links from the agent response.
-
-    Args:
-        text: The raw agent response text.
-
-    Returns:
-        Cleaned text suitable for sending to Telegram.
-    """
+    """Removes internal file:// links from the agent response."""
     text = _FILE_LINK_RE.sub(r"\1", text)
     text = _BARE_FILE_URL_RE.sub("", text)
     return text.strip()
 
 
 def _build_mcp_env(extra_vars: dict[str, str] | None = None) -> dict[str, str]:
-    """Builds a sanitized environment dictionary for an MCP subprocess.
-
-    Args:
-        extra_vars: Optional dictionary of service-specific environment variables.
-
-    Returns:
-        Environment dictionary with allowed system environment variables plus extra_vars.
-    """
+    """Builds a sanitized environment dictionary for an MCP subprocess."""
     env: dict[str, str] = {}
     for key in _MCP_ENV_PASSTHROUGH:
         val = os.environ.get(key)
@@ -71,17 +83,7 @@ def _build_mcp_env(extra_vars: dict[str, str] | None = None) -> dict[str, str]:
 
 
 def build_mcp_servers_for_user(perms: UserPermissions) -> list[McpStdioServer]:
-    """Dynamically constructs the list of MCP servers authorized for a user.
-
-    If a user lacks a token for a given service, that MCP server is excluded
-    from the list, isolating user capabilities at the LLM prompt level.
-
-    Args:
-        perms: The UserPermissions object for the user.
-
-    Returns:
-        List of McpStdioServer instances configured with user tokens.
-    """
+    """Dynamically constructs the list of MCP servers authorized for a user."""
     servers: list[McpStdioServer] = []
 
     # 1. Paperless-ngx MCP
@@ -143,7 +145,7 @@ def build_mcp_servers_for_user(perms: UserPermissions) -> list[McpStdioServer]:
             )
         )
 
-    # 5. Home Connect MCP (Bosch/Siemens appliances)
+    # 5. Home Connect MCP
     if perms.home_connect_token:
         extra_env = {"HOME_CONNECT_TOKEN": perms.home_connect_token}
         if perms.home_connect_client_id:
@@ -161,11 +163,7 @@ def build_mcp_servers_for_user(perms: UserPermissions) -> list[McpStdioServer]:
 
 
 def load_base_instructions() -> str:
-    """Loads system instructions from base_instructions.md.
-
-    Returns:
-        Content of base_instructions.md file.
-    """
+    """Loads system instructions from base_instructions.md."""
     instructions_file = PROMPTS_DIR / "base_instructions.md"
     if instructions_file.exists():
         return instructions_file.read_text(encoding="utf-8")
@@ -173,21 +171,43 @@ def load_base_instructions() -> str:
 
 
 async def run_agent_query(perms: UserPermissions, prompt: str) -> str:
-    """Runs the Antigravity agent against user-authorized MCP tools.
-
-    Args:
-        perms: The requesting user's UserPermissions.
-        prompt: User natural language prompt.
-
-    Returns:
-        Cleaned agent response text.
-    """
+    """Runs the Antigravity agent against user-authorized MCP tools."""
     mcp_servers = build_mcp_servers_for_user(perms)
     instructions = load_base_instructions()
 
     with tempfile.TemporaryDirectory() as temp_dir:
         agent_config = LocalAgentConfig(
             system_instructions=instructions,
+            mcp_servers=mcp_servers,
+            capabilities=CapabilitiesConfig(allow_file_write=False, allow_command_execution=False),
+            save_dir=temp_dir,
+            model=Config.GEMINI_MODEL,
+        )
+
+        async with Agent(agent_config) as agent:
+            response = await agent.chat(prompt)
+            report = ""
+            async for token in response:
+                report += token
+
+    return _clean_agent_response(report)
+
+
+async def run_archiving_agent(perms: UserPermissions, doc_id: int, file_name: str) -> str:
+    """Runs the document archiving agent against Paperless MCP."""
+    mcp_servers = build_mcp_servers_for_user(perms)
+    prompt = (
+        f"We have a new document to archive in Paperless-ngx.\n"
+        f"Document ID: {doc_id}\n"
+        f"Original Filename: {file_name}\n\n"
+        f"Please retrieve this document using `get_document` with ID {doc_id}, "
+        f"analyze its content, assign metadata and tags, write a structured note, "
+        f"and output a final report."
+    )
+
+    with tempfile.TemporaryDirectory() as temp_dir:
+        agent_config = LocalAgentConfig(
+            system_instructions=ARCHIVE_INSTRUCTIONS,
             mcp_servers=mcp_servers,
             capabilities=CapabilitiesConfig(allow_file_write=False, allow_command_execution=False),
             save_dir=temp_dir,
