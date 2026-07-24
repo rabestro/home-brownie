@@ -18,6 +18,8 @@ class UserPermissions(BaseModel):
     github_token: str | None = None
     home_assistant_token: str | None = None
     cloudflare_token: str | None = None
+    home_connect_token: str | None = None
+    home_connect_client_id: str | None = None
 
 
 class Config:
