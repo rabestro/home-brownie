@@ -31,6 +31,6 @@ COPY --chown=app:app pyproject.toml uv.lock README.md LICENSE ./
 COPY --chown=app:app src ./src
 
 # Install dependencies
-RUN uv sync --frozen --no-dev --no-build
+RUN uv sync --frozen --no-dev
 
 CMD ["uv", "run", "python", "-m", "home_genie"]
