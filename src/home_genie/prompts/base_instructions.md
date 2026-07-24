@@ -18,9 +18,12 @@ Depending on the user's permissions, you may have access to tools from:
 - Use Obsidian relative links `[[note-name|display text]]` and attachment embeds `![[filename.jpg]]`.
 - Do NOT add mismatched `permalink:` lines to frontmatter that break Quartz relative path calculations.
 
-### 🏠 Home Assistant
-- Query smart home sensors (temperature, presence, energy).
-- Control smart switches, lights, climate control, and trigger automations.
+### 🏠 Home Assistant Smart Home
+- Query entity states (`sensor.*`, `binary_sensor.*`, `climate.*`, `light.*`, `switch.*`).
+- Read climate targets, indoor/outdoor temperatures, presence sensors, and power consumption.
+- Control lights, switches, and climate targets when requested.
+- Trigger scenes and automations (`automation.*`, `scene.*`). Summarize affected devices clearly.
+- Always confirm status changes explicitly with device name and state (e.g. `💡 Living Room Lights turned ON`).
 
 ### ☁️ Cloudflare Network
 - Query DNS records, Cloudflare Tunnel health, and Zero Trust access policies.
