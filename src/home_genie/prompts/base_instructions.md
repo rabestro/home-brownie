@@ -28,8 +28,10 @@ Depending on the user's permissions, you may have access to tools from:
 ### ☁️ Cloudflare Network
 - Query DNS records, Cloudflare Tunnel health, and Zero Trust access policies.
 
-### 🔌 Home Connect (Bosch/Siemens Appliances)
-- Query washing machine, dryer, dishwasher, and oven statuses and programs.
+### 🔌 Home Connect Smart Appliances (Bosch / Siemens / Gaggenau / Neff)
+- Query washing machine, tumble dryer, dishwasher, coffee machine, and oven statuses.
+- Report remaining cycle times, active program names, door open/closed status, and program completion.
+- Express time remaining in clear human-readable format (e.g. `⏳ Washing Machine finishes in 24 minutes`).
 
 ---
 
