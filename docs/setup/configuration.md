@@ -11,8 +11,8 @@ Home Genie relies on environment variables and a structured JSON string to enfor
 | `TELEGRAM_BOT_TOKEN` | Yes | Token from @BotFather | `123456789:ABC...` |
 | `GEMINI_API_KEY` | Yes | API key from Google AI Studio | `AIzaSy...` |
 | `GEMINI_MODEL` | No | Gemini model selection | `gemini-3.1-flash-lite` |
-| `PAPERLESS_URL` | Optional | Endpoint for Paperless-ngx | `https://docs.petera9a.id.lv` |
-| `HOME_ASSISTANT_URL` | Optional | Endpoint for Home Assistant | `https://home.petera9a.id.lv` |
+| `PAPERLESS_URL` | Optional | Endpoint for Paperless-ngx | `https://docs.example.com` |
+| `HOME_ASSISTANT_URL` | Optional | Endpoint for Home Assistant | `https://home.example.com` |
 | `FAMILY_USERS` | Yes | JSON string mapping Telegram User IDs to tokens | *See JSON schema below* |
 
 ---

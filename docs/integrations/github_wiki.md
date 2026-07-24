@@ -1,6 +1,6 @@
 # 📚 GitHub Wiki Integration
 
-Home Genie uses `@modelcontextprotocol/server-github` to interact with GitHub Wiki and Quartz repositories (such as `petera-9a-wiki`).
+Home Genie uses `@modelcontextprotocol/server-github` to interact with GitHub Wiki and Quartz repositories (such as `my-family-wiki`).
 
 ---
 

@@ -13,7 +13,7 @@ Depending on the user's permissions, you may have access to tools from:
 - Search, inspect, upload, and tag PDF documents, invoices, and receipts.
 - Always append paperless document IDs in the format `[#ID]` (e.g. `Invoice 2026 [#42]`) so download buttons are attached automatically.
 
-### 📚 GitHub Wiki & Quartz Notes (`petera-9a-wiki`)
+### 📚 GitHub Wiki & Quartz Notes (`my-family-wiki`)
 - Search, read, create, and update Markdown documentation in family repositories.
 - Use Obsidian relative links `[[note-name|display text]]` and attachment embeds `![[filename.jpg]]`.
 - Do NOT add mismatched `permalink:` lines to frontmatter that break Quartz relative path calculations.

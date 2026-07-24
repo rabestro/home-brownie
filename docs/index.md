@@ -9,7 +9,7 @@ Powered by the **Google Antigravity SDK** and **Gemini 3.1 Flash**, Home Genie c
 ## ✨ Key Capabilities
 
 - 🏛 **Paperless-ngx**: Search document archives, auto-assign metadata and tags, upload new documents.
-- 📚 **GitHub Wiki (Quartz)**: Look up family notes, create and update Markdown documentation in `petera-9a-wiki`.
+- 📚 **GitHub Wiki (Quartz)**: Look up family notes, create and update Markdown documentation in `my-family-wiki`.
 - 🏠 **Home Assistant**: Query smart sensors, lights, climate control, and trigger automations.
 - ☁️ **Cloudflare**: Inspect DNS records, Cloudflare Tunnels, and Zero Trust access policies.
 - 🔌 **Home Connect**: Query and control smart household appliances (Bosch, Siemens, Gaggenau).

@@ -7,7 +7,7 @@ Guide for deploying Home Genie in production on your home server (`aurora`) usin
 ## 1. Prerequisites on Server
 
 - **Docker & Docker Compose** installed
-- Access to your homelab networks (`docs.petera9a.id.lv`, `home.petera9a.id.lv`)
+- Access to your homelab networks (`docs.example.com`, `home.example.com`)
 
 ---
 
@@ -33,8 +33,8 @@ Fill in production credentials in `.env`:
 TELEGRAM_BOT_TOKEN="your_bot_token"
 GEMINI_API_KEY="your_gemini_api_key"
 GEMINI_MODEL="gemini-3.1-flash-lite"
-PAPERLESS_URL="https://docs.petera9a.id.lv"
-HOME_ASSISTANT_URL="https://home.petera9a.id.lv"
+PAPERLESS_URL="https://docs.example.com"
+HOME_ASSISTANT_URL="https://home.example.com"
 FAMILY_USERS='{
   "123456789": {
     "name": "Jegors",
