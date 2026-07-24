@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Install pinned Paperless MCP binary
-ARG PAPERLESS_MCP_VERSION=1.6.0
+ARG PAPERLESS_MCP_VERSION=2.0.1
 RUN npm install -g "@baruchiro/paperless-mcp@${PAPERLESS_MCP_VERSION}"
 
 # Copy uv binary
@@ -26,8 +26,8 @@ WORKDIR /app
 RUN useradd -m -u 1000 app && chown -R app:app /app
 USER app
 
-# Copy project files
-COPY --chown=app:app pyproject.toml uv.lock ./
+# Copy project configuration, docs, and source
+COPY --chown=app:app pyproject.toml uv.lock README.md LICENSE ./
 COPY --chown=app:app src ./src
 
 # Install dependencies
