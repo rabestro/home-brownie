@@ -1,0 +1,14 @@
+services:
+  home-genie:
+    build: .
+    container_name: home-genie
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - TELEGRAM_BOT_TOKEN
+      - GEMINI_API_KEY
+      - GEMINI_MODEL
+      - PAPERLESS_URL
+      - HOME_ASSISTANT_URL
+      - FAMILY_USERS

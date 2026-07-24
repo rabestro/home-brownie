@@ -1,0 +1,56 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+
+# =============================================================================
+# CodeRabbit Configuration — Home Genie (Python 3.14 async Telegram bot)
+# =============================================================================
+# Reviews are triggered MANUALLY: comment `@coderabbitai review` on the PRs
+# that warrant a second opinion.
+# =============================================================================
+
+language: en-US
+
+reviews:
+  profile: assertive
+
+  high_level_summary: false
+  poem: false
+  collapse_walkthrough: true
+
+  auto_review:
+    enabled: false
+    drafts: false
+    base_branches:
+      - main
+
+  path_filters:
+    - "!uv.lock"
+    - "!**/*.lock"
+
+  tools:
+    ruff:
+      enabled: true
+    actionlint:
+      enabled: true
+    hadolint:
+      enabled: true
+    gitleaks:
+      enabled: true
+    shellcheck:
+      enabled: true
+    markdownlint:
+      enabled: true
+
+  path_instructions:
+    - path: "src/home_genie/**"
+      instructions: |
+        Async Telegram bot driving a Google Antigravity agent with Paperless-ngx,
+        GitHub Wiki, Home Assistant, and Cloudflare MCP tools. When reviewing:
+        - Verify multi-tenant RBAC boundaries: MCP servers are dynamically constructed
+          only for systems where a user has a valid API token configured.
+        - Ensure secret hygiene: TELEGRAM_BOT_TOKEN and GEMINI_API_KEY must never
+          be leaked to MCP subprocess environments.
+        - Telegram messages use plain text + emoji — avoid Markdown syntax errors.
+    - path: "src/home_genie/config.py"
+      instructions: |
+        Environment and JSON-driven multi-user RBAC configuration. Any required env
+        variable must be validated in Config.validate() with the fail-fast pattern.

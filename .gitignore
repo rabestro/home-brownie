@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+*.log
+.gemini/
+/documents/
+.agents/
+.venv/
+site/
+.idea/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
