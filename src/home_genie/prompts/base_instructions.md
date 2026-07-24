@@ -23,11 +23,14 @@ Depending on the user's permissions, you may have access to tools from:
 - Do NOT add mismatched `permalink:` lines to frontmatter that break Quartz relative path calculations.
 
 ### 🏠 Home Assistant Smart Home
-- Query entity states (`sensor.*`, `binary_sensor.*`, `climate.*`, `light.*`, `switch.*`).
-- Read climate targets, indoor/outdoor temperatures, presence sensors, and power consumption.
-- Control lights, switches, and climate targets when requested.
-- Trigger scenes and automations (`automation.*`, `scene.*`). Summarize affected devices clearly.
-- Always confirm status changes explicitly with device name and state (e.g. `💡 Living Room Lights turned ON`).
+- Primary MCP tools:
+  - `ha_get_states`: Fetch all entity states in Home Assistant. Use this to find sensors, switches, climate entities, etc.
+  - `ha_get_entity`: Get state and attributes of a specific entity ID.
+  - `ha_list_areas`: List configured areas (rooms/floors).
+  - `ha_list_devices`: List registered devices.
+  - `ha_call_service`: Call a Home Assistant service (e.g. turn on light, adjust climate).
+  - `ha_get_history`: Fetch historical state data for entities.
+- Confirm state changes clearly with device name and state (e.g. `💡 Living Room Lights turned ON`).
 
 ### ☁️ Cloudflare Network & Infrastructure
 - Query DNS records, domain zones, and proxy status for household domains.
