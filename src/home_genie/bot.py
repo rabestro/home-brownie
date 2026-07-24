@@ -397,6 +397,52 @@ async def handle_text_query(message: Message, bot: AsyncTeleBot) -> None:
         )
 
 
+async def handle_ask(message: Message, bot: AsyncTeleBot) -> None:
+    """Processes /ask <query> command in group or private chats."""
+    if not is_allowed(message) or not message.from_user:
+        return
+
+    text = message.text or ""
+    parts = text.split(maxsplit=1)
+    if len(parts) < 2:  # noqa: PLR2004
+        await bot.reply_to(
+            message,
+            "💡 Usage: /ask <your question>\nExample: /ask какая температура?",
+        )
+        return
+
+    query_text = parts[1].strip()
+    status_message = await bot.reply_to(message, "🧠 Querying assistant...")
+    try:
+        perms = Config.get_user_permissions(message.from_user.id)
+        history = _user_histories[message.from_user.id]
+        prompt = history.build_context(query_text)
+
+        agent_report = await run_agent_query(perms, prompt)
+        history.add(query_text, agent_report)
+
+        await bot.delete_message(
+            chat_id=status_message.chat.id, message_id=status_message.message_id
+        )
+
+        doc_ids = _extract_doc_ids(agent_report)
+        clean_text = _DOC_TAG_RE.sub("", agent_report).strip()
+        keyboard = _build_doc_keyboard(doc_ids)
+        chunks = _chunk_text(clean_text)
+
+        for chunk in chunks[:-1]:
+            await bot.send_message(message.chat.id, chunk)
+        await bot.send_message(message.chat.id, chunks[-1], reply_markup=keyboard)
+
+    except Exception as e:
+        logger.exception("Error processing /ask command")
+        await bot.edit_message_text(
+            f"❌ An error occurred: {e}",
+            chat_id=status_message.chat.id,
+            message_id=status_message.message_id,
+        )
+
+
 def create_bot(config: type[Config]) -> AsyncTeleBot:
     """Builds an AsyncTeleBot with all handlers registered."""
     bot = AsyncTeleBot(config.TELEGRAM_BOT_TOKEN)
@@ -414,6 +460,11 @@ def create_bot(config: type[Config]) -> AsyncTeleBot:
     bot.register_message_handler(
         handle_get,  # type: ignore[arg-type]
         commands=["get"],
+        pass_bot=True,
+    )
+    bot.register_message_handler(
+        handle_ask,  # type: ignore[arg-type]
+        commands=["ask"],
         pass_bot=True,
     )
     bot.register_message_handler(
