@@ -48,14 +48,7 @@ class PaperlessTask(BaseModel):
 
 
 def _parse_task_id(response: httpx.Response) -> str:
-    """Extracts task ID from a post_document response.
-
-    Args:
-        response: HTTP response from post_document.
-
-    Returns:
-        Extracted task ID string.
-    """
+    """Extracts task ID from a post_document response."""
     try:
         data = response.json()
     except ValueError:
@@ -95,32 +88,42 @@ def _extract_duplicate_id(result_text: str) -> int | None:
     return int(match.group(1)) if match else None
 
 
+def _evaluate_task_status(task: PaperlessTask) -> int | None:
+    """Evaluates task status.
+
+    Returns doc_id if SUCCESS, raises on FAILURE/duplicate, or None if in progress.
+    """
+    status = task.status.upper()
+    if status == "SUCCESS":
+        doc_id = _extract_document_id(task)
+        if doc_id is not None:
+            return doc_id
+        raise ValueError(f"Task succeeded but document ID missing: {task.result}")
+
+    if status in ("FAILED", "FAILURE"):
+        result_text = task.result or ""
+        duplicate_id = _extract_duplicate_id(result_text)
+        if duplicate_id is not None:
+            raise DuplicateDocumentError(doc_id=duplicate_id)
+        raise ValueError(f"Processing failed: {result_text}")
+
+    return None
+
+
 async def _notify(on_status: StatusCallback | None, message: str) -> None:
     if on_status is not None:
         await on_status(message)
 
 
 class PaperlessClient:
-    """Async HTTP client for Paperless-ngx.
-
-    Args:
-        base_url: Paperless-ngx base URL.
-        token: User API token.
-    """
+    """Async HTTP client for Paperless-ngx."""
 
     def __init__(self, base_url: str, token: str) -> None:
         self._base_url = base_url.rstrip("/")
         self._headers = {"Authorization": f"Token {token}"}
 
     async def fetch_document_info(self, doc_id: int) -> PaperlessDocument | None:
-        """Fetches metadata for a document ID.
-
-        Args:
-            doc_id: Paperless document ID.
-
-        Returns:
-            PaperlessDocument or None if 404.
-        """
+        """Fetches metadata for a document ID."""
         url = f"{self._base_url}/api/documents/{doc_id}/"
         async with httpx.AsyncClient(timeout=30) as client:
             resp = await client.get(url, headers=self._headers)
@@ -130,14 +133,7 @@ class PaperlessClient:
             return PaperlessDocument.model_validate(resp.json())
 
     async def download_pdf(self, doc_id: int) -> bytes:
-        """Downloads the original PDF bytes for a document ID.
-
-        Args:
-            doc_id: Paperless document ID.
-
-        Returns:
-            Raw bytes of the PDF.
-        """
+        """Downloads original PDF bytes for a document ID."""
         url = f"{self._base_url}/api/documents/{doc_id}/download/"
         async with httpx.AsyncClient(timeout=120, follow_redirects=True) as client:
             resp = await client.get(url, headers=self._headers)
@@ -153,18 +149,7 @@ class PaperlessClient:
         max_wait: float = _DEFAULT_MAX_WAIT,
         poll_interval: float = _DEFAULT_POLL_INTERVAL,
     ) -> int:
-        """Uploads a document and polls OCR status until completion.
-
-        Args:
-            file_bytes: Raw file bytes.
-            file_name: Original file name.
-            on_status: Progress callback.
-            max_wait: Max seconds to wait.
-            poll_interval: Seconds between status polls.
-
-        Returns:
-            Created document ID.
-        """
+        """Uploads a document and polls OCR status until completion."""
         upload_url = f"{self._base_url}/api/documents/post_document/"
         files = {"document": (file_name, file_bytes)}
 
@@ -196,21 +181,9 @@ class PaperlessClient:
                         raise ValueError(f"Task polling failed: {err}") from err
                     continue
 
-                if task is None:
-                    continue
-
-                status = task.status.upper()
-                if status == "SUCCESS":
-                    doc_id = _extract_document_id(task)
+                if task is not None:
+                    doc_id = _evaluate_task_status(task)
                     if doc_id is not None:
                         return doc_id
-                    raise ValueError(f"Task succeeded but document ID missing: {task.result}")
-
-                if status in ("FAILED", "FAILURE"):
-                    result_text = task.result or ""
-                    duplicate_id = _extract_duplicate_id(result_text)
-                    if duplicate_id is not None:
-                        raise DuplicateDocumentError(doc_id=duplicate_id)
-                    raise ValueError(f"Processing failed: {result_text}")
 
             raise TimeoutError("Timed out waiting for OCR processing.")
