@@ -1,5 +1,9 @@
 # 🧞 Home Genie (`home-genie`)
 
+[![CI](https://github.com/rabestro/home-genie/actions/workflows/ci.yaml/badge.svg)](https://github.com/rabestro/home-genie/actions/workflows/ci.yaml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=rabestro_home-genie&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=rabestro_home-genie)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=rabestro_home-genie&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=rabestro_home-genie)
+[![Docs](https://img.shields.io/badge/docs-site-indigo.svg)](https://jc.id.lv/home-genie/)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Python 3.14](https://img.shields.io/badge/python-3.14-blue.svg)](https://www.python.org/)
 

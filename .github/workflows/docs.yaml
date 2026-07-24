@@ -22,7 +22,7 @@ jobs:
           python-version-file: ".python-version"
 
       - name: Install dependencies
-        run: uv sync --group docs
+        run: uv sync --group docs --no-build
 
       - name: Build and deploy MkDocs
         run: uv run --group docs mkdocs gh-deploy --force
