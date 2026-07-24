@@ -1,0 +1,86 @@
+# Automated PR labeling rules based on modified files and branch names.
+
+# 💬 Telegram bot handlers, UX, and per-user chat state
+telegram:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/home_genie/bot.py'
+
+# 🤖 AI agent behavior: prompts, MCP wiring, and the run loop
+agent:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/home_genie/agent.py'
+          - 'src/home_genie/prompts/**'
+
+# 🔒 RBAC and Security
+security:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/home_genie/config.py'
+
+# 🏛️ Paperless-ngx integration
+paperless:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/home_genie/mcp/paperless.py'
+
+# 📚 GitHub Wiki (Quartz) integration
+wiki:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/home_genie/mcp/github.py'
+
+# 🏠 Home Assistant integration
+home-assistant:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/home_genie/mcp/home_assistant.py'
+
+# ☁️ Cloudflare integration
+cloudflare:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/home_genie/mcp/cloudflare.py'
+
+# 🧪 Tests
+testing:
+  - changed-files:
+      - all-globs-to-all-files:
+          - 'tests/**'
+
+# 📚 Documentation
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/*.md'
+          - 'docs/**'
+          - 'mkdocs.yaml'
+
+# ⚙️ CI/CD workflows and repo automation config
+ci-cd:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '.github/workflows/**'
+          - '.github/labeler.yml'
+          - '.github/release.yml'
+          - '.github/dependabot.yaml'
+          - '.pre-commit-config.yaml'
+          - '.coderabbit.yaml'
+
+# 📦 Infrastructure & Docker
+infrastructure:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'Dockerfile'
+          - 'docker-compose.yml'
+
+# Type labels based on branch naming conventions
+enhancement:
+  - head-branch: ['^feat/', '^feature/']
+bug:
+  - head-branch: ['^bug/', '^fix/', '^bugfix/']
+refactoring:
+  - head-branch: ['^refactor/']
+performance:
+  - head-branch: ['^perf/']

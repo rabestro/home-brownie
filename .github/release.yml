@@ -1,0 +1,34 @@
+changelog:
+  categories:
+    - title: 🚀 New Features
+      labels: [enhancement]
+    - title: 🐛 Bug Fixes
+      labels: [bug]
+    - title: 🤖 AI Agent & Prompts
+      labels: [agent]
+    - title: 💬 Telegram Bot & UX
+      labels: [telegram]
+    - title: 🔒 Security & RBAC
+      labels: [security]
+    - title: 🏛️ Paperless-ngx Integration
+      labels: [paperless]
+    - title: 📚 GitHub Wiki Integration
+      labels: [wiki]
+    - title: 🏠 Home Assistant Integration
+      labels: [home-assistant]
+    - title: ☁️ Cloudflare Integration
+      labels: [cloudflare]
+    - title: 🛠 Refactoring & Performance
+      labels: [refactoring, performance]
+    - title: 🧪 Tests
+      labels: [testing]
+    - title: 📚 Documentation
+      labels: [documentation]
+    - title: ⚙️ CI/CD & Automation
+      labels: [ci-cd]
+    - title: 📦 Infrastructure & Docker
+      labels: [infrastructure]
+    - title: 📦 Dependencies
+      labels: [dependencies]
+    - title: Other Changes
+      labels: ['*']

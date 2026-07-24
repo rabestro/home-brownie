@@ -1,0 +1,92 @@
+name: 'CI: Gemini Review'
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review, synchronize]
+
+concurrency:
+  group: '${{ github.workflow }}-${{ github.event.pull_request.number }}'
+  cancel-in-progress: true
+
+jobs:
+  review:
+    if: github.event.pull_request.head.repo.fork == false && vars.GCP_WIF_PROVIDER != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Run Gemini pull request review
+        uses: google-github-actions/run-gemini-cli@v0
+        env:
+          GEMINI_CLI_TRUST_WORKSPACE: 'true'
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          use_vertex_ai: ${{ vars.GOOGLE_GENAI_USE_VERTEXAI }}
+          gcp_workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          gcp_service_account: ${{ vars.SERVICE_ACCOUNT_EMAIL }}
+          gcp_project_id: ${{ vars.GOOGLE_CLOUD_PROJECT }}
+          gcp_location: ${{ vars.GOOGLE_CLOUD_LOCATION }}
+          gemini_model: ${{ vars.GEMINI_MODEL }}
+          gemini_debug: ${{ vars.GEMINI_DEBUG == 'true' }}
+          upload_artifacts: ${{ vars.GEMINI_DEBUG == 'true' }}
+          workflow_name: gemini-review
+          github_pr_number: ${{ github.event.pull_request.number }}
+          settings: |-
+            {
+              "context": {
+                "fileName": ["AGENTS.md", "GEMINI.md"]
+              },
+              "model": {
+                "maxSessionTurns": 50
+              },
+              "mcpServers": {
+                "github": {
+                  "command": "docker",
+                  "args": [
+                    "run",
+                    "-i",
+                    "--rm",
+                    "-e",
+                    "GITHUB_PERSONAL_ACCESS_TOKEN",
+                    "ghcr.io/github/github-mcp-server:v0.27.0"
+                  ],
+                  "includeTools": [
+                    "pull_request_read",
+                    "pull_request_review_write",
+                    "add_comment_to_pending_review"
+                  ],
+                  "env": {
+                    "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+                  }
+                }
+              }
+            }
+          prompt: |-
+            You are reviewing a GitHub pull request for home-genie (Python 3.14 async Telegram bot driving Google Antigravity agent & MCP tools).
+
+            Repository: ${{ github.repository }}
+            Pull request number: ${{ github.event.pull_request.number }}
+
+            Your review criteria are this repository's conventions in AGENTS.md:
+            Apply code conventions, testing conventions, gotchas, multi-tenant RBAC isolation boundaries, and security rules. Report only findings a maintainer would act on: real bugs, contract or invariant violations, security issues, missing tests for new behaviour, and documented-gotcha violations. Do not comment on formatting the toolchain enforces, do not restate the diff, and do not praise.
+
+            Follow EXACTLY this tool sequence (GitHub MCP server tools):
+            1. pull_request_read with method "get" — read the PR title and description.
+            2. pull_request_read with method "get_diff" — get the full diff.
+            3. Analyse the diff against the review criteria above.
+            4. pull_request_review_write with method "create" — open a pending review.
+            5. For EACH finding: add_comment_to_pending_review with:
+               - path: the file path from the diff
+               - line: the line number in the NEW file version; side "RIGHT"
+               - subjectType: "LINE"
+               - body: "[HIGH|MEDIUM|LOW] <concise finding>. <why it matters / what to do>" — add a fenced ```suggestion block only when you are certain of the exact replacement lines.
+            6. pull_request_review_write with method "submit_pending" with event "COMMENT" and a body containing a 2-4 sentence summary: overall verdict, main risks, anything you could not verify.
