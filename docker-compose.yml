@@ -1,6 +1,6 @@
 services:
   home-genie:
-    build: .
+    image: ghcr.io/rabestro/home-genie:latest
     container_name: home-genie
     restart: unless-stopped
     env_file:
