@@ -5,8 +5,8 @@ ENV PYTHONUNBUFFERED=1 \
 
 # Install Node.js 24+ for Node-based MCP tools
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl \
     ca-certificates \
+    curl \
     gnupg \
     && curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
     && apt-get install -y --no-install-recommends nodejs \
@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Install pinned Paperless MCP binary
 ARG PAPERLESS_MCP_VERSION=2.0.1
-RUN npm install -g "@baruchiro/paperless-mcp@${PAPERLESS_MCP_VERSION}"
+RUN npm install -g --ignore-scripts "@baruchiro/paperless-mcp@${PAPERLESS_MCP_VERSION}"
 
 # Copy uv binary
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
@@ -31,6 +31,6 @@ COPY --chown=app:app pyproject.toml uv.lock README.md LICENSE ./
 COPY --chown=app:app src ./src
 
 # Install dependencies
-RUN uv sync --frozen --no-dev
+RUN uv sync --frozen --no-dev --no-build
 
 CMD ["uv", "run", "python", "-m", "home_genie"]
