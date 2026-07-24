@@ -120,20 +120,23 @@ def build_mcp_servers_for_user(perms: UserPermissions) -> list[McpStdioServer]:
 
     # 3. Home Assistant MCP
     if perms.home_assistant_token:
-        ha_binary = "home-assistant-mcp-server"
+        ha_binary = "ha-mcp-server"
         cmd = ha_binary if shutil.which(ha_binary) else "npx"
-        args = [] if cmd == ha_binary else ["-y", "home-assistant-mcp-server@1.0.2"]
+        args = [] if cmd == ha_binary else ["-y", "ha-mcp-server@0.7.2"]
+        env = _build_mcp_env(
+            {
+                "HOME_ASSISTANT_URL": Config.HOME_ASSISTANT_URL,
+                "HOME_ASSISTANT_TOKEN": perms.home_assistant_token,
+                "HA_URL": Config.HOME_ASSISTANT_URL,
+                "HA_TOKEN": perms.home_assistant_token,
+            }
+        )
         servers.append(
             McpStdioServer(
                 name="home-assistant",
                 command=cmd,
                 args=args,
-                env=_build_mcp_env(
-                    {
-                        "HOME_ASSISTANT_URL": Config.HOME_ASSISTANT_URL,
-                        "HOME_ASSISTANT_TOKEN": perms.home_assistant_token,
-                    }
-                ),
+                env=env,
             )
         )
 
