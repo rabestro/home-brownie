@@ -15,10 +15,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Install pinned Paperless & Home Assistant MCP binaries
 ARG PAPERLESS_MCP_VERSION=2.0.1
-ARG HOME_ASSISTANT_MCP_VERSION=0.7.2
+ARG HOME_ASSISTANT_MCP_VERSION=1.0.10
 RUN npm install -g --ignore-scripts \
     "@baruchiro/paperless-mcp@${PAPERLESS_MCP_VERSION}" \
-    "ha-mcp-server@${HOME_ASSISTANT_MCP_VERSION}"
+    "@jarahkon/hass-mcp-server@${HOME_ASSISTANT_MCP_VERSION}"
 
 # Copy uv binary
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
