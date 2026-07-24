@@ -321,6 +321,35 @@ async def handle_doc_button(call: CallbackQuery, bot: AsyncTeleBot) -> None:
         await bot.send_message(chat_id, f"❌ Download error: {e}")
 
 
+async def _is_mentioned_or_replied(message: Message, bot: AsyncTeleBot) -> bool:
+    """In group chats, check if the bot is explicitly mentioned or replied to."""
+    if message.chat.type == "private":
+        return True
+
+    bot_info = await bot.get_me()
+
+    if (
+        message.reply_to_message
+        and message.reply_to_message.from_user
+        and message.reply_to_message.from_user.id == bot_info.id
+    ):
+        return True
+
+    if bot_info.username:
+        username = f"@{bot_info.username}"
+        return username.lower() in (message.text or "").lower()
+
+    return False
+
+
+def _clean_group_query(text: str, bot_username: str | None) -> str:
+    """Strips bot username mention from text query."""
+    if not bot_username:
+        return text.strip()
+    pattern = re.compile(rf"@{re.escape(bot_username)}", re.IGNORECASE)
+    return pattern.sub("", text).strip()
+
+
 async def handle_text_query(message: Message, bot: AsyncTeleBot) -> None:
     """Processes natural language text queries using AI agent."""
     if not is_allowed(message) or not message.from_user:
@@ -329,14 +358,22 @@ async def handle_text_query(message: Message, bot: AsyncTeleBot) -> None:
     if not message.text or message.text.startswith("/"):
         return
 
+    if not await _is_mentioned_or_replied(message, bot):
+        return
+
+    bot_info = await bot.get_me()
+    query_text = _clean_group_query(message.text, bot_info.username)
+    if not query_text:
+        return
+
     status_message = await bot.reply_to(message, "🧠 Querying assistant...")
     try:
         perms = Config.get_user_permissions(message.from_user.id)
         history = _user_histories[message.from_user.id]
-        prompt = history.build_context(message.text)
+        prompt = history.build_context(query_text)
 
         agent_report = await run_agent_query(perms, prompt)
-        history.add(message.text, agent_report)
+        history.add(query_text, agent_report)
 
         await bot.delete_message(
             chat_id=status_message.chat.id, message_id=status_message.message_id

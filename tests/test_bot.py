@@ -5,7 +5,12 @@ import json
 import pytest
 from telebot.types import Message
 
-from home_genie.bot import _get_accessible_systems_summary, create_bot, is_allowed
+from home_genie.bot import (
+    _clean_group_query,
+    _get_accessible_systems_summary,
+    create_bot,
+    is_allowed,
+)
 from home_genie.config import Config, UserPermissions
 
 
@@ -56,3 +61,11 @@ def test_create_bot_factory(monkeypatch: pytest.MonkeyPatch) -> None:
     bot = create_bot(Config)
     assert bot is not None
     assert bot.token == "123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ"
+
+
+def test_clean_group_query() -> None:
+    assert (
+        _clean_group_query("@petera9a_bot какая температура?", "petera9a_bot")
+        == "какая температура?"
+    )
+    assert _clean_group_query("какая температура?", "petera9a_bot") == "какая температура?"
