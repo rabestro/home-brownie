@@ -25,7 +25,12 @@ async def main() -> None:
 
     bot = create_bot(Config)
     logger.info("Home Genie initialized. Starting async polling...")
-    await bot.polling(non_stop=True)
+    while True:
+        try:
+            await bot.infinity_polling(timeout=20, long_polling_timeout=20)
+        except Exception:
+            logger.exception("Polling error encountered. Reconnecting in 5 seconds...")
+            await asyncio.sleep(5)
 
 
 if __name__ == "__main__":
