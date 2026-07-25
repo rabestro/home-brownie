@@ -35,6 +35,10 @@ COPY --chown=app:app pyproject.toml uv.lock README.md LICENSE ./
 COPY --chown=app:app src ./src
 
 # Install dependencies
-RUN uv sync --frozen --no-dev
+# Install only third-party dependencies from pre-built wheels (no sdist build scripts),
+# then install the project itself from its pre-built wheel
+RUN uv build --wheel --out-dir dist/ \
+    && uv sync --frozen --no-dev --no-install-project --no-build \
+    && uv pip install --no-build dist/home_brownie-*.whl
 
 CMD ["uv", "run", "python", "-m", "home_brownie"]
