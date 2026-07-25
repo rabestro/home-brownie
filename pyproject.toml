@@ -3,9 +3,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "home-genie"
+name = "home-brownie"
 version = "0.1.0"
-description = "🧞 Autonomous AI-powered Telegram assistant for homelabs, Paperless-ngx, Home Assistant, and GitHub Wiki powered by Google Antigravity SDK & Gemini."
+description = "🤎 Autonomous AI-powered Telegram household spirit & homelab assistant for Paperless-ngx, Home Assistant, and GitHub Wiki."
 readme = "README.md"
 requires-python = ">=3.14"
 license = { text = "AGPL-3.0-or-later" }
@@ -29,11 +29,14 @@ dependencies = [
   "pydantic>=2",
 ]
 
+[project.scripts]
+home-brownie = "home_brownie.__main__:main"
+
 [project.urls]
-Homepage = "https://github.com/rabestro/home-genie"
-Repository = "https://github.com/rabestro/home-genie"
-Issues = "https://github.com/rabestro/home-genie/issues"
-Changelog = "https://github.com/rabestro/home-genie/releases"
+Homepage = "https://github.com/rabestro/home-brownie"
+Repository = "https://github.com/rabestro/home-brownie"
+Issues = "https://github.com/rabestro/home-brownie/issues"
+Changelog = "https://github.com/rabestro/home-brownie/releases"
 
 [dependency-groups]
 dev = [
@@ -51,7 +54,7 @@ docs = [
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/home_genie"]
+packages = ["src/home_brownie"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

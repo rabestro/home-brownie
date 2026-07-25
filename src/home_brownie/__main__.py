@@ -4,8 +4,8 @@ import asyncio
 import logging
 import sys
 
-from home_genie.bot import create_bot
-from home_genie.config import Config
+from home_brownie.bot import create_bot
+from home_brownie.config import Config
 
 logging.basicConfig(
     level=logging.INFO,

@@ -1,13 +1,13 @@
-# 🧞 Home Genie (`home-genie`)
+# 🤎 Home Brownie (`home-brownie`)
 
-[![CI](https://github.com/rabestro/home-genie/actions/workflows/ci.yaml/badge.svg)](https://github.com/rabestro/home-genie/actions/workflows/ci.yaml)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=rabestro_home-genie&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=rabestro_home-genie)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=rabestro_home-genie&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=rabestro_home-genie)
-[![Docs](https://img.shields.io/badge/docs-site-indigo.svg)](https://jc.id.lv/home-genie/)
+[![CI](https://github.com/rabestro/home-brownie/actions/workflows/ci.yaml/badge.svg)](https://github.com/rabestro/home-brownie/actions/workflows/ci.yaml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=rabestro_home-brownie&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=rabestro_home-brownie)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=rabestro_home-brownie&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=rabestro_home-brownie)
+[![Docs](https://img.shields.io/badge/docs-site-indigo.svg)](https://jc.id.lv/home-brownie/)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Python 3.14](https://img.shields.io/badge/python-3.14-blue.svg)](https://www.python.org/)
 
-**Home Genie** is an autonomous, AI-powered Telegram assistant for personal homelabs. Powered by the **Google Antigravity SDK** and **Gemini**, it integrates multiple Model Context Protocol (MCP) servers to manage family documents, household wikis, smart home automation, and network infrastructure directly from Telegram.
+**Home Brownie** is an autonomous, AI-powered Telegram household spirit and assistant for personal homelabs. Powered by the **Google Antigravity SDK** and **Gemini**, it integrates multiple Model Context Protocol (MCP) servers to manage family documents, household wikis, smart home automation, and network infrastructure directly from Telegram.
 
 ---
 
@@ -44,8 +44,8 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/rabestro/home-genie.git
-cd home-genie
+git clone https://github.com/rabestro/home-brownie.git
+cd home-brownie
 
 # Install all dependencies (including dev tools)
 uv sync --all-groups

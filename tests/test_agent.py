@@ -1,7 +1,5 @@
-"""Unit tests for dynamic MCP server sandbox building and user RBAC in agent.py."""
-
-from home_genie.agent import build_mcp_servers_for_user
-from home_genie.config import UserPermissions
+from home_brownie.agent import build_mcp_servers_for_user
+from home_brownie.config import UserPermissions
 
 
 def test_build_mcp_servers_empty_tokens() -> None:

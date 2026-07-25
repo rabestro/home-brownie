@@ -559,7 +559,7 @@ wheels = [
 ]
 
 [[package]]
-name = "home-genie"
+name = "home-brownie"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [

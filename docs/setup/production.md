@@ -18,10 +18,10 @@ Guide for deploying Home Genie in production on your home server (`aurora`) usin
 ssh user@aurora
 
 # Create application directory
-mkdir -p /opt/home-genie && cd /opt/home-genie
+mkdir -p ~/home-brownie && cd ~/home-brownie
 
 # Download compose definition
-curl -o docker-compose.yml https://raw.githubusercontent.com/rabestro/home-genie/main/docker-compose.yml
+curl -o docker-compose.yml https://raw.githubusercontent.com/rabestro/home-brownie/main/docker-compose.yml
 
 # Create production .env file
 nano .env

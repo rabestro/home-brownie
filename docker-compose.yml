@@ -1,7 +1,7 @@
 services:
-  home-genie:
-    image: ghcr.io/rabestro/home-genie:latest
-    container_name: home-genie
+  home-brownie:
+    image: ghcr.io/rabestro/home-brownie:latest
+    container_name: home-brownie
     restart: unless-stopped
     env_file:
       - .env

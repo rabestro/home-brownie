@@ -16,8 +16,8 @@ Get Home Genie running locally in minutes.
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/rabestro/home-genie.git
-cd home-genie
+git clone https://github.com/rabestro/home-brownie.git
+cd home-brownie
 
 # 2. Install all dependencies (including dev and docs tooling)
 uv sync --all-groups

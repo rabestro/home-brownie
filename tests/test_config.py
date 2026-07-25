@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-from home_genie.config import Config
+from home_brownie.config import Config
 
 
 def test_config_validation_success(monkeypatch: pytest.MonkeyPatch) -> None:

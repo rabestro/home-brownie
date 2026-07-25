@@ -5,13 +5,13 @@ import json
 import pytest
 from telebot.types import Message
 
-from home_genie.bot import (
+from home_brownie.bot import (
     _clean_group_query,
     _get_accessible_systems_summary,
     create_bot,
     is_allowed,
 )
-from home_genie.config import Config, UserPermissions
+from home_brownie.config import Config, UserPermissions
 
 
 def test_is_allowed_authorized(monkeypatch: pytest.MonkeyPatch) -> None:

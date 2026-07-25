@@ -4,7 +4,7 @@ import httpx
 import pytest
 import respx
 
-from home_genie.paperless import (
+from home_brownie.paperless import (
     DuplicateDocumentError,
     PaperlessClient,
     PaperlessTask,

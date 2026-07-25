@@ -36,4 +36,4 @@ COPY --chown=app:app src ./src
 # Install dependencies
 RUN uv sync --frozen --no-dev
 
-CMD ["uv", "run", "python", "-m", "home_genie"]
+CMD ["uv", "run", "python", "-m", "home_brownie"]

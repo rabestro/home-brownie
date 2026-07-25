@@ -9,10 +9,10 @@ from datetime import UTC, datetime
 from telebot.async_telebot import AsyncTeleBot
 from telebot.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, Message
 
-from home_genie.agent import run_agent_query, run_archiving_agent
-from home_genie.config import Config, UserPermissions
-from home_genie.conversation import ConversationHistory
-from home_genie.paperless import DuplicateDocumentError, PaperlessClient
+from home_brownie.agent import run_agent_query, run_archiving_agent
+from home_brownie.config import Config, UserPermissions
+from home_brownie.conversation import ConversationHistory
+from home_brownie.paperless import DuplicateDocumentError, PaperlessClient
 
 logger = logging.getLogger(__name__)
 

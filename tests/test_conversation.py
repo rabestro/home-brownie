@@ -1,6 +1,6 @@
 """Unit tests for ConversationHistory in conversation.py."""
 
-from home_genie.conversation import ConversationHistory
+from home_brownie.conversation import ConversationHistory
 
 
 def test_conversation_history_add_and_trim() -> None:

@@ -10,7 +10,7 @@ from pathlib import Path
 from google.antigravity import Agent, CapabilitiesConfig, LocalAgentConfig
 from google.antigravity.types import McpStdioServer
 
-from home_genie.config import Config, UserPermissions
+from home_brownie.config import Config, UserPermissions
 
 logger = logging.getLogger(__name__)
 

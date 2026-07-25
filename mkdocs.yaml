@@ -1,10 +1,10 @@
-site_name: 🧞 Home Genie
-site_url: https://jc.id.lv/home-genie/
-site_description: Autonomous AI-powered Telegram assistant for homelabs, Paperless-ngx, Home Assistant, and GitHub Wiki.
+site_name: 🤎 Home Brownie
+site_url: https://jc.id.lv/home-brownie/
+site_description: Autonomous AI-powered Telegram household spirit for homelabs, Paperless-ngx, Home Assistant, and GitHub Wiki.
 site_author: Jegors Čemisovs
 
-repo_name: rabestro/home-genie
-repo_url: https://github.com/rabestro/home-genie
+repo_name: rabestro/home-brownie
+repo_url: https://github.com/rabestro/home-brownie
 
 theme:
   name: material
