@@ -3,15 +3,11 @@ FROM python:3.14-slim
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1
 
-# Install Node.js 24+ for Node-based MCP tools
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates \
-    curl \
-    gnupg \
-    && curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
-    && apt-get install -y --no-install-recommends nodejs \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# Install Node.js 24 from the official image — no curl | bash, integrity guaranteed by Docker
+COPY --from=node:24-slim /usr/local/bin/node   /usr/local/bin/node
+COPY --from=node:24-slim /usr/local/bin/npm    /usr/local/bin/npm
+COPY --from=node:24-slim /usr/local/bin/npx    /usr/local/bin/npx
+COPY --from=node:24-slim /usr/local/lib/node_modules /usr/local/lib/node_modules
 
 # Install pinned Paperless & Home Assistant MCP binaries
 ARG PAPERLESS_MCP_VERSION=2.0.1
