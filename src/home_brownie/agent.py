@@ -109,11 +109,14 @@ def build_mcp_servers_for_user(perms: UserPermissions) -> list[McpStdioServer]:
 
     # 2. GitHub Wiki MCP
     if perms.github_token:
+        github_binary = "mcp-server-github"
+        cmd = github_binary if shutil.which(github_binary) else "npx"
+        args = [] if cmd == github_binary else ["-y", "@modelcontextprotocol/server-github"]
         servers.append(
             McpStdioServer(
                 name="github-wiki",
-                command="npx",
-                args=["-y", "@modelcontextprotocol/server-github"],
+                command=cmd,
+                args=args,
                 env=_build_mcp_env({"GITHUB_PERSONAL_ACCESS_TOKEN": perms.github_token}),
             )
         )
