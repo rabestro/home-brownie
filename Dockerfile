@@ -18,13 +18,14 @@ ENV PYTHONUNBUFFERED=1 \
 # Copy Node.js runtime and globally installed MCP packages from the builder stage
 COPY --from=node:24-slim /usr/local/bin/node /usr/local/bin/node
 COPY --from=node-builder  /usr/local/lib/node_modules /usr/local/lib/node_modules
-COPY --from=node-builder  /usr/local/bin/paperless-mcp      /usr/local/bin/paperless-mcp
-COPY --from=node-builder  /usr/local/bin/hass-mcp-server    /usr/local/bin/hass-mcp-server
 
-# Recreate symlinks for npm, npx, and mcp-server-github.
-# Docker COPY dereferences symlinks, breaking their internal relative imports.
+# Recreate bin symlinks for all MCP servers, npm, and npx.
+# Docker COPY dereferences symlinks, breaking ES module resolution
+# (e.g. "Cannot find package '@modelcontextprotocol/sdk'").
 RUN ln -s ../lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
     && ln -s ../lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx \
+    && ln -s ../lib/node_modules/@baruchiro/paperless-mcp/build/index.js /usr/local/bin/paperless-mcp \
+    && ln -s ../lib/node_modules/@jarahkon/hass-mcp-server/dist/index.js /usr/local/bin/hass-mcp-server \
     && ln -s ../lib/node_modules/@modelcontextprotocol/server-github/dist/index.js /usr/local/bin/mcp-server-github
 
 # Copy uv binary
