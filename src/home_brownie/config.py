@@ -31,6 +31,11 @@ class Config:
     GEMINI_API_KEY: str = ""
     GEMINI_MODEL: str = "gemini-3.1-flash-lite"
 
+    # Wiki repository coordinates (GitHub)
+    WIKI_REPO_OWNER: str = ""
+    WIKI_REPO_NAME: str = ""
+    WIKI_REPO_PATH: str = ""
+
     # Mapping of Telegram user IDs to UserPermissions objects
     FAMILY_USERS: ClassVar[dict[int, UserPermissions]] = {}
 
@@ -46,6 +51,10 @@ class Config:
         cls.HOME_ASSISTANT_URL = os.environ.get("HOME_ASSISTANT_URL", "")
         cls.GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
         cls.GEMINI_MODEL = os.environ.get("GEMINI_MODEL") or "gemini-3.1-flash-lite"
+
+        cls.WIKI_REPO_OWNER = os.environ.get("WIKI_REPO_OWNER", "")
+        cls.WIKI_REPO_NAME = os.environ.get("WIKI_REPO_NAME", "")
+        cls.WIKI_REPO_PATH = os.environ.get("WIKI_REPO_PATH", "")
 
         if not cls.TELEGRAM_BOT_TOKEN:
             raise ValueError("TELEGRAM_BOT_TOKEN environment variable is not set!")

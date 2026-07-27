@@ -172,10 +172,15 @@ def build_mcp_servers_for_user(perms: UserPermissions) -> list[McpStdioServer]:
 
 
 def load_base_instructions() -> str:
-    """Loads system instructions from base_instructions.md."""
+    """Loads system instructions from base_instructions.md and renders wiki placeholders."""
     instructions_file = PROMPTS_DIR / "base_instructions.md"
     if instructions_file.exists():
-        return instructions_file.read_text(encoding="utf-8")
+        template = instructions_file.read_text(encoding="utf-8")
+        return template.format(
+            WIKI_REPO_OWNER=Config.WIKI_REPO_OWNER,
+            WIKI_REPO_NAME=Config.WIKI_REPO_NAME,
+            WIKI_REPO_PATH=Config.WIKI_REPO_PATH,
+        )
     return "You are Home Genie, a helpful homelab AI assistant."
 
 
