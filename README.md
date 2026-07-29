@@ -22,6 +22,18 @@
 
 ---
 
+## ⚠️ Hardware Requirements & CPU Compatibility
+
+**Home Brownie** uses the **Google Antigravity SDK** (`google-antigravity`), which embeds native Go binaries compiled with modern CPU instruction set requirements:
+
+- **x86_64 / amd64**: Requires **AVX** instruction support (Intel Haswell / 4th Gen 2013+ or AMD FX-8300+).
+  - ❌ *Not supported*: Older x86_64 CPUs and many NAS devices (Intel Celeron J3455/J4125, Atom) lacking AVX instructions (`FATAL ERROR: This binary was compiled with avx enabled...`).
+- **ARM64 / aarch64**: Requires **ARM Cryptography Extensions (AES)**.
+  - ❌ *Not supported*: **Raspberry Pi 3** (Broadcom BCM2837 / Cortex-A53 lacks hardware AES instructions). Crashes with `FATAL ERROR: This binary was compiled with aes enabled...`.
+  - ✅ *Supported*: **Raspberry Pi 4**, **Raspberry Pi 5**, Apple Silicon, and modern ARM64 cloud VPS.
+
+---
+
 ## 🛠️ Stack
 
 - **Language**: Python 3.14
