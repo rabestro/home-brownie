@@ -1,4 +1,4 @@
-FROM node:24-slim AS node-builder
+FROM node:25-slim AS node-builder
 
 # Install pinned MCP binaries in the Node stage
 ARG PAPERLESS_MCP_VERSION=2.0.1
