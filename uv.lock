@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = ">=3.14"
 resolution-markers = [
     "python_full_version >= '3.15'",
@@ -1283,15 +1283,15 @@ wheels = [
 
 [[package]]
 name = "pytelegrambotapi"
-version = "4.36.1"
+version = "4.37.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohttp" },
     { name = "requests" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b6/61/a342a1e13206e99b4cf9fd7ecf109c589bd2ad4b4d0ea7b8859750a7c3c6/pytelegrambotapi-4.36.1.tar.gz", hash = "sha256:1baa4154452cf93e654e74f3cb2800d5a2e8b11018c2fff45b247b7e6a7fb027", size = 1407140, upload-time = "2026-08-13T17:27:57.99Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/56/a1/a451e1907123d23c8d9d5d4bee1baf8fa151d48b29dab4cfe6570ba765da/pytelegrambotapi-4.37.1.tar.gz", hash = "sha256:349c06a4cce8f82d10cfc1bdc3395f750e19ea1413d445e944147d7736f58b59", size = 1434176, upload-time = "2026-10-17T13:14:14.619Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/aa/8a/f119aff83a7dd4570f6d6e9fa85bde75388d1574f43b8f656cee0d7ddcaf/pytelegrambotapi-4.36.1-py3-none-any.whl", hash = "sha256:2a3524c553ea7363d1b6d9ab4557f9cd9adb037642287687cdf05e158d670767", size = 334956, upload-time = "2026-08-13T17:27:56.302Z" },
+    { url = "https://files.pythonhosted.org/packages/8f/21/8b8962cde18def7cb2bff73b6aa53fa4790a8d6e42c893ee5515de53a7c3/pytelegrambotapi-4.37.1-py3-none-any.whl", hash = "sha256:6d1741c6a3b66c2fb8fbfb5b64cc9f06824408a5c7811d9fe3e5fadd51c37d15", size = 341874, upload-time = "2026-10-17T13:14:12.734Z" },
 ]
 
 [[package]]
