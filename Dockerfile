@@ -10,7 +10,7 @@ RUN npm install -g \
     "@modelcontextprotocol/server-github@${GITHUB_MCP_VERSION}"
 
 # --- Final image ---
-FROM python:3.14-slim
+FROM python:3.15-slim
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1
